@@ -30,5 +30,8 @@ const updateUserOrder = (productId, action) => {
     }),
   })
     .then((response) => response.json())
-    .then((data) => console.log('data', data));
+    .then((data) => {
+      console.log('data', data);
+      location.reload();
+    });
 };
