@@ -112,19 +112,70 @@
     </div>
   </div>
 </div>
-
 <script type="text/javascript">
   const shipping = '{{ order.shipping }}';
+
+  const total = '{{ order.get_cart_total | floatformat:2 }}';
+
+  const submitFormData = (e) => {
+    e.preventDefault();
+    console.log(e);
+    console.log('Payment button clicked');
+
+    const userFormData = {
+      name: null,
+      email: null,
+      total,
+    };
+
+    const shippingInfo = {
+      address: null,
+      city: null,
+      state: null,
+      zipcode: null,
+    };
+
+    if(shipping !== 'False') {
+      shippingInfo.address =  form.address.value
+      shippingInfo.city =  form.city.value
+      shippingInfo.state =  form.state.value
+      shippingInfo.zipcode =  form.zipcode.value
+    }
+
+    if(user === 'AnonymousUser') {
+      userFormData.name = form.name.value
+      userFormData.email = form.email.value
+    }
+  };
+
+  console.log('shipping', shipping);
+
   if (shipping === 'False') {
     document.querySelector('#shipping-info').innerHTML = '';
   }
 
+  if (user != 'AnonymousUser') {
+    document.querySelector('#user-info').innerHTML = '';
+  }
+
+  if (shipping === 'False' && user != 'AnonymousUser') {
+    document.querySelector('#form-wrapper').classList.add('hidden');
+    document.querySelector('#payment-info').classList.remove('hidden');
+  }
+
   const form = document.querySelector('#form');
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     console.log('Form submitted');
     document.querySelector('#form-button').classList.add('hidden');
     document.querySelector('#payment-info').classList.remove('hidden');
   });
+
+  document
+    .querySelector('#make-payment')
+    .addEventListener('click', function (e) {
+      submitFormData(e);
+    });
 </script>
 {% endblock content %}
